@@ -3,7 +3,7 @@ import { Octokit, App } from "octokit";
 import Pagination from '@mui/material/Pagination';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import Router from 'next/router';
+import Head from 'next/head';
 
 
 const Home = () => {
@@ -63,6 +63,10 @@ const Home = () => {
 
   return (
     <div  className=''>
+      <Head>
+        <title>repos finder</title>
+        <link rel='icon' href="https://img.icons8.com/3d-fluency/100/000000/3d-fluency-github-logo.png"></link>
+      </Head>
       <div className='flex flex-col md:items-center md:justify-between md:flex-row' style={{ padding: "0vh 2vh" }}>
         <div className='flex justify-center md:justify-start items-center'>
           <img className='w-[15vh]' src="https://img.icons8.com/clouds/100/000000/github.png" />
