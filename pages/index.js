@@ -103,7 +103,7 @@ const Home = () => {
 
         <Box className='fixed top-[50%] left-[50%]' sx={{ display: 'flex' }}>
           <CircularProgress />
-        </Box> : nf?<div className='flex justify-center items-center text-[2vh] md:text-[2vw] flex-col md:flex-row'><p>No user found</p><img src="https://img.icons8.com/clouds/400/000000/error.png"/></div>:""}
+        </Box> : nf?<div className='flex justify-center items-center text-[2vh] md:text-[2vw] flex-col md:flex-row'><p>No user found</p><img className='h-[50vh]' src="https://img.icons8.com/clouds/400/000000/error.png"/></div>:<div className='flex justify-center items-center h-[100%]'><img className='h-[50vh]' src="https://img.icons8.com/clouds/400/000000/enter-2.png"/></div>}
 
 
 
