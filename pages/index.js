@@ -107,7 +107,7 @@ const Home = () => {
 
         <Box className='fixed top-[50%] left-[50%]' sx={{ display: 'flex' }}>
           <CircularProgress />
-        </Box> : nf?<div className='flex justify-center items-center text-[2vh] md:text-[2vw] flex-col md:flex-row'><p>No user found</p><img className='h-[50vh]' src="https://img.icons8.com/clouds/400/000000/error.png"/></div>:<div className='flex justify-center items-center h-[100%]'><img className='h-[50vh]' src="https://img.icons8.com/clouds/400/000000/enter-2.png"/></div>}
+        </Box> : nf?<div className='flex justify-center items-center text-[2vh] md:text-[2vw] flex-col md:flex-row'><p>No user found</p><img className='h-[50vh]' src="https://img.icons8.com/clouds/400/000000/error.png"/></div>:<div className='flex justify-center flex-col items-center h-[100%]'><img className='h-[50vh]' src="https://img.icons8.com/clouds/400/000000/enter-2.png"/><p className='text-[3vh]'>Made with ❤️ by <a className='font-bold ' href='https://www.linkedin.com/in/rohit-rawat-a41b411a9/'>rohit rawat</a></p></div>}
 
 
 
