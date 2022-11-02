@@ -46,7 +46,6 @@ useEffect(() => {
 
   const search = async () => {
     setready(false)
-    
     setpage(1)
     setstart(true)
     try{const response = await octokit.request('GET /users/{username}', {
