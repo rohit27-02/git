@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { Octokit, App } from "octokit";
-import Pagination from '@mui/material/Pagination';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Head from 'next/head';
-
-
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Octokit } from 'octokit';
+import { createOAuthAppAuth } from '@octokit/auth-oauth-app';
 const Home = () => {
   const [username, setusername] = useState("");
   const [user, setuser] = useState();
-  const [data, setdata] = useState({});
+  const [data, setdata] = useState([]);
   const [ready, setready] = useState(false);
   const [start, setstart] = useState(false);
   const [page, setpage] = useState(1);
   const [nf, setnf] = useState(false);
-
+  
   const octokit = new Octokit({
-    auth: process.env.GIT_TOKEN
+    authStrategy: createOAuthAppAuth,
+    auth: {
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+    },
   })
 
   const handleChange = (e) => {
@@ -24,9 +27,9 @@ const Home = () => {
   }
 
 
-  const pagechange = async (e, value) => {
+  const pagechange = () => {
     setstart(true)
-    setpage(value)
+    setpage(page+1)
     
   }
   useEffect(() => {
@@ -35,21 +38,25 @@ const Home = () => {
 
   const changed=async()=>{
     const res = await octokit.request(`GET /users/{username}/repos`, { username: username, per_page: 10, page: page })
-    setdata(res.data)
-    setready(true)
+    setdata(data.concat(res.data))
   }
-
+useEffect(() => {
+  console.log(data)
+}, [data]);
 
   const search = async () => {
     setready(false)
+    
     setpage(1)
     setstart(true)
     try{const response = await octokit.request('GET /users/{username}', {
       username: username
-    })
+    }
+    )
+    
     setuser(response.data)
     const res = await octokit.request(`GET /users/{username}/repos`, { username: username,per_page:10})
-    setdata(res.data)
+    setdata(data.concat(res.data))
     setready(true)
     setstart(false)}
     catch(err){
@@ -92,17 +99,26 @@ const Home = () => {
       </div>
 
         <h1 className='text-center md:text-[4vw] text-[4vh] mt-[36vh] md:mt-0 font-medium py-[3vh]'>Repostries : {user.public_repos}</h1>
-        <div className='flex flex-col md:grid md:grid-cols-2 grid-flow-row px-[2vh]   py-[6vh]'>
-          {Object.keys(data).map((r) => {
-            return <a href={data[r].html_url} key={r} className="border-2 hover:bg-[#c7ede6] break-words rounded-xl hover:border-[#c7ede6] transition-all duration-700 hover:text-black cursor-pointer space-y-[3vh] border-white m-[2vh] p-[2vh]"><h1 className='text-[4vh] font-semibold'>{data[r].name}</h1>
-              <p className='truncate text-[2.5vh]' >{data[r].description}</p>
-              <p className='bg-[#565fa1] h-[5.5vh] rounded-lg w-[18vh] text-white flex text-[2.5vh] justify-center items-center '>{data[r].language}</p>
-            </a>
-          })}
-
-        </div>
+        <InfiniteScroll
+          className='flex flex-col md:grid md:grid-cols-2 grid-flow-row px-[2vh]   py-[6vh]'
+            dataLength={user.public_repos}  //This is important field to render the next data
+            next={pagechange}
+            hasMore={true}
+            loader={<h4>Loading...</h4>}
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+          >
+            {data.map((r) => {
+              return <a href={r.html_url} key={r.html_url} className="border-2 hover:bg-[#c7ede6] break-words rounded-xl hover:border-[#c7ede6] transition-all duration-700 hover:text-black cursor-pointer space-y-[3vh] border-white m-[2vh] p-[2vh]"><h1 className='text-[4vh] font-semibold'>{r.name}</h1>
+                <p className='truncate text-[2.5vh]' >{r.description}</p>
+                <p className='bg-[#565fa1] h-[5.5vh] rounded-lg w-[18vh] text-white flex text-[2.5vh] justify-center items-center '>{r.language}</p>
+              </a>
+            })}
+          </InfiniteScroll>
        
-        <Pagination onChange={pagechange} page={page} className=' py-[1vh] rounded-full mx-[30vw] md:mb-[10vw] flex justify-center bg-[#c7ede6]' count={Math.floor((user.public_repos/10))+1} />
       </div> : start ?
 
         <Box className='fixed top-[50%] left-[50%]' sx={{ display: 'flex' }}>
