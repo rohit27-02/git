@@ -45,6 +45,7 @@ useEffect(() => {
 }, [data]);
 
   const search = async () => {
+    setdata([])
     setready(false)
     setpage(1)
     setstart(true)
@@ -100,7 +101,7 @@ useEffect(() => {
         <h1 className='text-center md:text-[4vw] text-[4vh] mt-[36vh] md:mt-0 font-medium py-[3vh]'>Repostries : {user.public_repos}</h1>
         <InfiniteScroll
           className='flex flex-col md:grid md:grid-cols-2 grid-flow-row px-[2vh]   py-[6vh]'
-            dataLength={user.public_repos}  //This is important field to render the next data
+            dataLength={data.length} //This is important field to render the next data
             next={pagechange}
             hasMore={true}
             loader={<h4>Loading...</h4>}
